@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.88871, a: 1}
+  m_Color: {r: 0, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -580,9 +580,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c28d90412037c4280b1cf8a691b7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   hitBox: {fileID: 774244727039570456}
   breakEffect: {fileID: 1971137468745966400}
   hpText: {fileID: 3929677494489458933}
+  spriteRenderer: {fileID: 1784516266511530084}
 --- !u!1 &8561697059179728827
 GameObject:
   m_ObjectHideFlags: 0

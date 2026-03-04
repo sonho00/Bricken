@@ -3,7 +3,6 @@ using UnityEngine;
 public abstract class Projectile : MonoBehaviour
 {
     [SerializeField] protected GameManager gameManager;
-    [SerializeField] private float maxVolume = 1f;
     protected AudioSource hitSound;
     public int damage;
 
