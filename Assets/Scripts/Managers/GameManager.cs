@@ -9,6 +9,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject retryMenu;
 
+    [SerializeField] private TextMeshProUGUI highRecordText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    private int _score = 0;
+    public int score
+    {
+        get { return _score; }
+        set
+        {
+            _score = value;
+            scoreText.text = "Score: " + _score;
+        }
+    }
+
     [SerializeField] private TextMeshProUGUI goldText;
     private int _gold = 0;
     public int gold
@@ -21,13 +34,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [SerializeField] private TextMeshProUGUI scoreText;
-    public int score;
     public GameState gameState;
 
     private void Start()
     {
         NextRound();
+    }
+
+    private void OnDestroy()
+    {
+        PlayerPrefs.Save();
     }
 
     public void Fire(Vector2 start, Vector2 end)
@@ -48,6 +64,15 @@ public class GameManager : MonoBehaviour
     public void NextRound()
     {
         brickManager.CreateBrick(++score);
+
+        int highRecord = PlayerPrefs.GetInt("HighRecord", 0);
+        if (score > highRecord)
+        {
+            PlayerPrefs.SetInt("HighRecord", score);
+            highRecord = score;
+        }
+        highRecordText.text = "High Record: " + highRecord;
+
         if (brickManager.IsGameOver())
         {
             gameState = GameState.GameOver;
