@@ -1,76 +1,53 @@
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
-using System.Text;
-using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 [System.Serializable]
-public class ScorePacket
+public class RankData
 {
+    public int rank;
     public string name;
     public int score;
+
+    public void Deconstruct(out int rank, out string name, out int score) =>
+        (rank, name, score) = (this.rank, this.name, this.score);
 }
 
 [System.Serializable]
-public class SaveResponse
+public class RankDataList
 {
-    public string status;
-    public string message;
+    public List<RankData> ranks;
 }
 
 public class NetworkManager : MonoBehaviour
 {
-    private string url = "http://127.0.0.1:8000/save-score";
+    private const string url = "http://127.0.0.1:8000";
 
-    void Update()
+    public async void PostScore(string name, int score)
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            StartCoroutine(PostScore("Laborat", Random.Range(100, 1000)));
-        }
+        var request = new UnityWebRequest($"{url}/save-score", "POST");
+        var data = $"{{\"name\":\"{name}\",\"score\":{score}}}";
+
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(data);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        await request.SendWebRequest();
     }
 
-    IEnumerator PostScore(string playerName, int score)
+    public async Awaitable<List<RankData>> RequestLeaderboard()
     {
-        ScorePacket packet = new ScorePacket { name = playerName, score = score };
-        string json = JsonUtility.ToJson(packet);
+        var request = new UnityWebRequest($"{url}/leaderboard", "GET");
+        request.downloadHandler = new DownloadHandlerBuffer();
+        await request.SendWebRequest();
 
-        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                SaveResponse res = JsonUtility.FromJson<SaveResponse>(request.downloadHandler.text);
-
-                Debug.Log("<color=green>서버 응답 성공:</color> " + res.message);
-            }
-            else
-            {
-                Debug.Log("<color=red>서버 응답 실패:</color> " + request.error);
-            }
+            string rawData = request.downloadHandler.text;
+            string json = $"{{\"ranks\":{rawData}}}";
+            RankDataList list = JsonUtility.FromJson<RankDataList>(json);
+            return list.ranks;
         }
-    }
-
-    IEnumerator GetScores()
-    {
-        using (UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1:8000/scores"))
-        {
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("<color=green>서버 응답 성공:</color> " + request.downloadHandler.text);
-            }
-            else
-            {
-                Debug.Log("<color=red>서버 응답 실패:</color> " + request.error);
-            }
-        }
+        else return new List<RankData>();
     }
 }

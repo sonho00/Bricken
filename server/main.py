@@ -67,7 +67,7 @@ async def save_score(data: ScoreData):
 
 
 # 2. 리더보드 조회 (Top 5)
-@app.get("/scores")
+@app.get("/leaderboard")
 async def get_scores():
     conn = sqlite3.connect("game.db")
     cursor = conn.cursor()

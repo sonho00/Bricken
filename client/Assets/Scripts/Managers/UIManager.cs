@@ -29,6 +29,26 @@ public class UIManager : MonoBehaviour
         goldText.text = "Gold: " + gold;
     }
 
+    public async void ShowLeaderboard(bool show)
+    {
+        leaderboardPanel.SetActive(show);
+        if (!show) return;
+
+        List<RankData> data = await networkManager.RequestLeaderboard();
+        for (int i = 0; i < rankTexts.Length; i++)
+        {
+            if (i < data.Count)
+            {
+                var (rank, name, score) = data[i];
+                rankTexts[i].text = $"{rank}. {name} - {score}";
+            }
+            else
+            {
+                rankTexts[i].text = $"{i + 1}. ---";
+            }
+        }
+    }
+
     public void ShowPausePanel(bool show)
     {
         pausePanel.SetActive(show);
