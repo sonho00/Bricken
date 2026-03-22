@@ -5973,17 +5973,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2044419205}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowLeaderboard
-        m_Mode: 6
+      - m_Target: {fileID: 2055628049}
+        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
+        m_MethodName: RequestLeaderboard
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1842741636
 MonoBehaviour:
@@ -6574,16 +6574,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e180e5dfa3fa1d847af7f0d62eca34fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  networkManager: {fileID: 2055628049}
   leaderboardPanel: {fileID: 1825615155}
   pausePanel: {fileID: 722757679}
   retryPanel: {fileID: 1029359936}
-  rankTexts:
-  - {fileID: 1403620220}
-  - {fileID: 362876027}
-  - {fileID: 548986652}
-  - {fileID: 1545560981}
-  - {fileID: 637970283}
   highScoreText: {fileID: 1052897249}
   scoreText: {fileID: 97368497}
   goldText: {fileID: 753242410}
@@ -6631,6 +6624,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f21a92e29a1aac4cbe803bde269cfb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkManager
+  rankTexts:
+  - {fileID: 1403620220}
+  - {fileID: 362876027}
+  - {fileID: 548986652}
+  - {fileID: 1545560981}
+  - {fileID: 637970283}
 --- !u!1 &2081792674
 GameObject:
   m_ObjectHideFlags: 0

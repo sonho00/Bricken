@@ -6,11 +6,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private BrickManager brickManager;
     [SerializeField] private WeaponManager weaponManager;
-    [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private GameObject retryMenu;
+    [SerializeField] private UIManager uiManager;
 
-    [SerializeField] private TextMeshProUGUI highRecordText;
-    [SerializeField] private TextMeshProUGUI scoreText;
     private int _score = 0;
     public int score
     {
@@ -18,7 +15,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _score = value;
-            scoreText.text = "Score: " + _score;
+            uiManager.SetScore(_score);
         }
     }
 
@@ -30,7 +27,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _gold = value;
-            goldText.text = "Gold: " + _gold;
+            uiManager.SetGold(_gold);
         }
     }
 
@@ -71,13 +68,12 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("HighRecord", score);
             highRecord = score;
         }
-        highRecordText.text = "High Record: " + highRecord;
+        uiManager.SetHighScore(highRecord);
 
         if (brickManager.IsGameOver())
         {
             gameState = GameState.GameOver;
-            retryMenu.SetActive(true);
-            scoreText.text = "Score: " + score;
+            uiManager.ShowRetryPanel(true);
         }
         else
         {
@@ -90,13 +86,13 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         gameState = GameState.Pause;
-        pauseMenu.SetActive(true);
+        uiManager.ShowPausePanel(true);
     }
 
     public void Resume()
     {
         gameState = GameState.Ready;
-        pauseMenu.SetActive(false);
+        uiManager.ShowPausePanel(false);
     }
 
     public void Retry()
