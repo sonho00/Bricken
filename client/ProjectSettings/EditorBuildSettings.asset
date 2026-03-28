@@ -9,6 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Bricken.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   m_configObjects:
+    com.unity.adaptivePerformance.basic.provider_settings: {fileID: 11400000, guid: f4629d756f515f847ae9750190015f7f, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: b75e1c725018a3b47956d02e9e84e794, type: 2}
     com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 2ab953ee2b6c22348ba95bf311cfc12e, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 1351510a0b3cc3740a9c827139a269d7, type: 2}

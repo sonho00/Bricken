@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -62,13 +61,13 @@ public class GameManager : MonoBehaviour
     {
         brickManager.CreateBrick(++score);
 
-        int highRecord = PlayerPrefs.GetInt("HighRecord", 0);
-        if (score > highRecord)
+        int highScore = PlayerPrefs.GetInt("HighScore", 0);
+        if (score > highScore)
         {
-            PlayerPrefs.SetInt("HighRecord", score);
-            highRecord = score;
+            PlayerPrefs.SetInt("HighScore", score);
+            highScore = score;
         }
-        uiManager.SetHighScore(highRecord);
+        uiManager.SetHighScore(highScore);
 
         if (brickManager.IsGameOver())
         {
@@ -91,10 +90,5 @@ public class GameManager : MonoBehaviour
     public void Resume()
     {
         gameState = GameState.Ready;
-    }
-
-    public void Retry()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

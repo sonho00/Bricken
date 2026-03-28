@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private NetworkManager networkManager;
     [SerializeField] private GameObject leaderboardPanel;
     [SerializeField] private GameObject pausePanel;
@@ -13,6 +14,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI highScoreText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI gameOverScoreText;
+
+    private void Start()
+    {
+        SetHighScore(PlayerPrefs.GetInt("HighScore", 0));
+        SetScore(0);
+        SetGold(0);
+    }
 
     public void SetHighScore(int highScore)
     {
@@ -56,6 +65,10 @@ public class UIManager : MonoBehaviour
 
     public void ShowRetryPanel(bool show)
     {
+        if (show)
+        {
+            gameOverScoreText.text = $"Your Score: {gameManager.score}";
+        }
         retryPanel.SetActive(show);
     }
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 using System;
+using Cysharp.Threading.Tasks;
 
 [System.Serializable]
 public class RankData
@@ -26,20 +27,21 @@ public class NetworkManager : MonoBehaviour
 {
     private const string url = "http://127.0.0.1:8000";
 
-    public async void PostScore(string name, int score)
+    public async UniTask PostScore(string name, int score)
     {
         var request = new UnityWebRequest($"{url}/post-score", "POST");
-        var obj = new { name, score };
+        RankData obj = new RankData { name = name, score = score };
         string data = JsonUtility.ToJson(obj);
 
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(data);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
 
         await request.SendWebRequest();
     }
 
-    public async Awaitable<List<RankData>> RequestLeaderboard()
+    public async UniTask<List<RankData>> RequestLeaderboard()
     {
         var request = new UnityWebRequest($"{url}/get-scores", "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -47,10 +49,9 @@ public class NetworkManager : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            string rawData = request.downloadHandler.text;
-            string json = $"{{\"ranks\":{rawData}}}";
-            RankDataList list = JsonUtility.FromJson<RankDataList>(json);
-            return list.ranks;
+            string json = request.downloadHandler.text;
+            RankDataList rankDataList = JsonUtility.FromJson<RankDataList>(json);
+            return rankDataList.ranks;
         }
         else return new List<RankData>();
     }
