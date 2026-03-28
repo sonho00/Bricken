@@ -39,8 +39,8 @@ public class UIManager : MonoBehaviour
         {
             if (i < data.Count)
             {
-                var (rank, name, score) = data[i];
-                rankTexts[i].text = $"{rank}. {name} - {score}";
+                var (name, score) = data[i];
+                rankTexts[i].text = $"{i + 1}. {name} - {score}";
             }
             else
             {

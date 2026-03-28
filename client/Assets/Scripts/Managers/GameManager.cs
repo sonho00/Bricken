@@ -86,13 +86,11 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         gameState = GameState.Pause;
-        uiManager.ShowPausePanel(true);
     }
 
     public void Resume()
     {
         gameState = GameState.Ready;
-        uiManager.ShowPausePanel(false);
     }
 
     public void Retry()

@@ -1,16 +1,19 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class RankData
 {
-    public int rank;
     public string name;
     public int score;
 
-    public void Deconstruct(out int rank, out string name, out int score) =>
-        (rank, name, score) = (this.rank, this.name, this.score);
+    internal void Deconstruct(out string name, out int score)
+    {
+        name = this.name;
+        score = this.score;
+    }
 }
 
 [System.Serializable]
@@ -25,8 +28,9 @@ public class NetworkManager : MonoBehaviour
 
     public async void PostScore(string name, int score)
     {
-        var request = new UnityWebRequest($"{url}/save-score", "POST");
-        var data = $"{{\"name\":\"{name}\",\"score\":{score}}}";
+        var request = new UnityWebRequest($"{url}/post-score", "POST");
+        var obj = new { name, score };
+        string data = JsonUtility.ToJson(obj);
 
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(data);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -37,7 +41,7 @@ public class NetworkManager : MonoBehaviour
 
     public async Awaitable<List<RankData>> RequestLeaderboard()
     {
-        var request = new UnityWebRequest($"{url}/leaderboard", "GET");
+        var request = new UnityWebRequest($"{url}/get-scores", "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
         await request.SendWebRequest();
 
